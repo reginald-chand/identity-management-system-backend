@@ -4,7 +4,7 @@
 
 This repository houses a robust backend system designed to manage user identities, leveraging modern technologies and a micro-service architecture approach.
 
-Whether integrated within a microservices ecosystem or deployed independently, my Identity Management System (IMS) offers a comprehensive solution solely dedicated to user authentication, authorization, and profile management.
+Whether integrated within a microservices ecosystem or deployed independently, my Identity Management System (IMS) backend offers a comprehensive solution solely dedicated to user authentication, authorization, and profile management.
 
 ## Project Synopsis
 
