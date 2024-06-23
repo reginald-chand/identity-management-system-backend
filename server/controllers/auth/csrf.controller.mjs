@@ -4,11 +4,15 @@ export const csrfController = async (request, response) => {
   const csrfToken = request.csrfToken();
 
   if (!csrfToken) {
-    response.status(404).json({ responseMessage: "CSRF Token not found." });
+    return response
+      .status(404)
+      .json({ responseMessage: "CSRF Token not found." });
   }
 
   try {
-    response.status(201).json({ responseMessage: { csrfToken: csrfToken } });
+    return response
+      .status(201)
+      .json({ responseMessage: { csrfToken: csrfToken } });
   } catch (error) {
     logger.log({
       level: "error",
