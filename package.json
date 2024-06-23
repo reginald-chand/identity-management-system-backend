@@ -1,7 +1,7 @@
 {
   "name": "identity-management-system-backend",
   "version": "1.0.0",
-  "description": "Node.js, Express.js, Mongoose.js, MongoDB microservice for secure Identity Management System (IMS). Designed for seamless integration in microservices architecture, ensuring robust user management with stringent security measures.",
+  "description": "A secure Identity Management System (IMS) backend microservice, designed for robust user management with stringent security measures, ideal for seamless integration within microservices architecture.",
   "main": "server/server.mjs",
   "author": "Reginald Chand",
   "license": "GPL-3.0-only",
