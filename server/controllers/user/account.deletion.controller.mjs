@@ -45,6 +45,10 @@ export const accountDeletionController = async (request, response) => {
       await database
         .collection(collection.name)
         .deleteMany({ _id: { $eq: existingUser._id } });
+
+      await database
+        .collection(collection.name)
+        .deleteMany({ userId: { $eq: existingUser._id } });
     });
 
     return response
