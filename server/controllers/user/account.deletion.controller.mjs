@@ -1,7 +1,7 @@
 import { AccessTokenModel } from "../../models/user/access.token.blacklist.model.mjs";
-import { ProfileModel } from "../../models/user/profile.model.mjs";
 import { SignUpModel } from "../../models/auth/signup.model.mjs";
 import { logger } from "../../configs/logger.config.mjs";
+import mongoose from "mongoose";
 import { userObjectValidator } from "../../validators/user/user.object.validator.mjs";
 
 export const accountDeletionController = async (request, response) => {
@@ -14,7 +14,7 @@ export const accountDeletionController = async (request, response) => {
   }
 
   const { user } = value;
-  const { email, id } = user;
+  const { email } = user;
   const { userName } = request.params;
 
   try {
@@ -38,11 +38,16 @@ export const accountDeletionController = async (request, response) => {
         .json({ responseMessage: "Cannot delete account." });
     }
 
-    await SignUpModel.findOneAndDelete({ _id: { $eq: id } });
-    await ProfileModel.findOneAndDelete({ _id: { $eq: id } });
-    await AccessTokenModel.findOneAndDelete({ _id: { $eq: id } });
+    const database = mongoose.connection.db;
+    const collections = await database.listCollections().toArray();
 
-    response
+    collections.forEach(async (collection) => {
+      await database
+        .collection(collection.name)
+        .deleteMany({ _id: { $eq: existingUser._id } });
+    });
+
+    return response
       .status(200)
       .json({ responseMessage: "Account deleted successfully." });
   } catch (error) {
