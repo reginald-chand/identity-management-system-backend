@@ -39,6 +39,7 @@ export const signInController = async (request, response) => {
       id: existingUser._id,
       firstName: existingUser.firstName,
       lastName: existingUser.lastName,
+      userName: existingUser.userName,
       email: existingUser.email,
     };
 
