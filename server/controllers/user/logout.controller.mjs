@@ -1,6 +1,7 @@
 import { AccessTokenModel } from "../../models/user/access.token.blacklist.model.mjs";
 import { SignUpModel } from "../../models/auth/signup.model.mjs";
 import { logger } from "../../configs/logger.config.mjs";
+import { redisClient } from "../../configs/redis.client.config.mjs";
 import { userObjectValidator } from "../../validators/user/user.object.validator.mjs";
 
 export const logoutController = async (request, response) => {
@@ -13,7 +14,7 @@ export const logoutController = async (request, response) => {
     return response.status(400).json({ responseMessage: error.message });
   }
 
-  const { user } = value;
+  const { csrfToken, user } = value;
   const { userName } = request.params;
 
   if (!accessToken && refreshToken) {
