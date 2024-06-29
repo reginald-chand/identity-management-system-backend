@@ -2,6 +2,7 @@ import { ProfileModel } from "../../models/user/profile.model.mjs";
 import { SignUpModel } from "../../models/auth/signup.model.mjs";
 import { logger } from "../../configs/logger.config.mjs";
 import { profileUpdateControllerValidator } from "../../validators/user/profile.update.controller.validator.mjs";
+import { redisClient } from "../../configs/redis.client.config.mjs";
 
 export const profileUpdateController = async (request, response) => {
   const { error, value } = profileUpdateControllerValidator.validate(
@@ -13,6 +14,7 @@ export const profileUpdateController = async (request, response) => {
   }
 
   const {
+    csrfToken,
     firstName,
     middleName,
     lastName,
@@ -28,6 +30,12 @@ export const profileUpdateController = async (request, response) => {
   } = value;
 
   try {
+    const userSession = await redisClient.hGetAll(user.email);
+
+    if (csrfToken !== userSession.csrfToken) {
+      return response.status(401).json({ responseMessage: "UnAuthorized." });
+    }
+
     const existingUser = await SignUpModel.findOne({
       email: { $eq: user.email },
     });
