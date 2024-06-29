@@ -21,6 +21,12 @@ export const logoutController = async (request, response) => {
   }
 
   try {
+    const userSession = await redisClient.hGetAll(user.email);
+
+    if (csrfToken !== userSession.csrfToken) {
+      return response.status(401).json({ responseMessage: "UnAuthorized." });
+    }
+
     const existingUser = await SignUpModel.findOne({
       email: { $eq: user.email },
     });
