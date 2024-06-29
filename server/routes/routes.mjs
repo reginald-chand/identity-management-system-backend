@@ -22,7 +22,7 @@ routes.post(
 );
 
 routes.put(
-  "/:username/profile-update",
+  "/:userName/profile-update",
   jwtAuthMiddleware,
   parameterMiddleware,
   profileUpdateController
