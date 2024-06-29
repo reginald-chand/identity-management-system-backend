@@ -2,8 +2,10 @@ import { AccessTokenModel } from "../../models/user/access.token.blacklist.model
 import { SignUpModel } from "../../models/auth/signup.model.mjs";
 import bcrypt from "bcryptjs";
 import { cookieOptions } from "../../configs/cookie.options.config.mjs";
+import { customCsrfGeneratorUtil } from "../../utils/custom.csrf.generator.util.mjs";
 import jwt from "jsonwebtoken";
 import { logger } from "../../configs/logger.config.mjs";
+import { persistCsrfUtil } from "../../utils/persist.csrf.util.mjs";
 import { signInControllerValidator } from "../../validators/auth/signin.controller.validator.mjs";
 
 export const signInController = async (request, response) => {
@@ -35,12 +37,17 @@ export const signInController = async (request, response) => {
         .json({ responseMessage: "Email or Password is incorrect." });
     }
 
+    const csrfToken = customCsrfGeneratorUtil();
+
+    persistCsrfUtil(csrfToken, existingUser.userName, existingUser.email);
+
     const userInformation = {
       id: existingUser._id,
       firstName: existingUser.firstName,
       lastName: existingUser.lastName,
       userName: existingUser.userName,
       email: existingUser.email,
+      csrfToken: csrfToken,
     };
 
     const accessToken = jwt.sign(userInformation, process.env.JWT_SECRET_KEY, {
