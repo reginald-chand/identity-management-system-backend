@@ -1,6 +1,7 @@
 import { cookieOptions } from "../configs/cookie.options.config.mjs";
 import jwt from "jsonwebtoken";
 import { logger } from "../configs/logger.config.mjs";
+import { persistCsrfUtil } from "../utils/persist.csrf.util.mjs";
 
 export const jwtAuthMiddleware = async (request, response, next) => {
   const accessToken = request.headers.authorization;
@@ -30,11 +31,16 @@ export const jwtAuthMiddleware = async (request, response, next) => {
 
       try {
         const payload = jwt.verify(refreshToken, process.env.JWT_SECRET_KEY);
+
+        persistCsrfUtil(payload.csrfToken, payload.userName, payload.email);
+
         const userInformation = {
-          id: payload.id,
+          id: payload._id,
           firstName: payload.firstName,
           lastName: payload.lastName,
+          userName: payload.userName,
           email: payload.email,
+          csrfToken: payload.csrfToken,
         };
 
         const newAccessToken = jwt.sign(
