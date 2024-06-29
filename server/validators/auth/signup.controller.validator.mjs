@@ -1,8 +1,6 @@
 import Joi from "joi";
 
 export const signUpControllerValidator = Joi.object({
-  _csrf: Joi.string().required(),
-
   firstName: Joi.string().pattern(new RegExp("^[A-Z].*$")).required(),
   middleName: Joi.string().pattern(new RegExp("^[A-Z].*$")),
   lastName: Joi.string().pattern(new RegExp("^[A-Z].*$")).required(),
