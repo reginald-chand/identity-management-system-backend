@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const profileUpdateControllerValidator = Joi.object({
-  _csrf: Joi.string().required(),
+  csrfToken: Joi.string().required(),
 
   firstName: Joi.string().pattern(new RegExp("^[A-Z].*$")),
   middleName: Joi.string().pattern(new RegExp("^[A-Z].*$")),
