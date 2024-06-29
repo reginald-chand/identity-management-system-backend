@@ -14,11 +14,12 @@ export const accountDeletionController = async (request, response) => {
   }
 
   const { user } = value;
-  const { email } = user;
   const { userName } = request.params;
 
   try {
-    const existingUser = await SignUpModel.findOne({ email: { $eq: email } });
+    const existingUser = await SignUpModel.findOne({
+      email: { $eq: user.email },
+    });
 
     if (!existingUser) {
       return response.status(401).json({ responseMessage: "UnAuthorized." });

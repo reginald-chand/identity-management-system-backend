@@ -11,11 +11,12 @@ export const profileController = async (request, response) => {
   }
 
   const { user } = value;
-  const { email } = user;
   const { userName } = request.params;
 
   try {
-    const existingUser = await SignUpModel.findOne({ email: { $eq: email } });
+    const existingUser = await SignUpModel.findOne({
+      email: { $eq: user.email },
+    });
 
     if (existingUser) {
       if (userName !== existingUser.userName) {

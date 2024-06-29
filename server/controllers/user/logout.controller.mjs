@@ -14,7 +14,6 @@ export const logoutController = async (request, response) => {
   }
 
   const { user } = value;
-  const { email } = user;
   const { userName } = request.params;
 
   if (!accessToken && refreshToken) {
@@ -22,7 +21,9 @@ export const logoutController = async (request, response) => {
   }
 
   try {
-    const existingUser = await SignUpModel.findOne({ email: { $eq: email } });
+    const existingUser = await SignUpModel.findOne({
+      email: { $eq: user.email },
+    });
 
     if (!existingUser) {
       return response.status(401).json({ responseMessage: "UnAuthorized." });
