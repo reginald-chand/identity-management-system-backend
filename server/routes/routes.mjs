@@ -4,6 +4,7 @@ import express from "express";
 import { jwtAuthMiddleware } from "../middlewares/jwt.auth.middleware.mjs";
 import { logoutController } from "../controllers/user/logout.controller.mjs";
 import { parameterMiddleware } from "../middlewares/parameter.middleware.mjs";
+import { passwordResetController } from "../controllers/user/password.reset.controller.mjs";
 import { profileController } from "../controllers/user/profile.controller.mjs";
 import { profileUpdateController } from "../controllers/user/profile.update.controller.mjs";
 import { signInController } from "../controllers/auth/signin.controller.mjs";
@@ -19,6 +20,13 @@ routes.post(
   jwtAuthMiddleware,
   parameterMiddleware,
   logoutController
+);
+
+routes.put(
+  "/:userName/password-reset",
+  jwtAuthMiddleware,
+  parameterMiddleware,
+  passwordResetController
 );
 
 routes.put(
