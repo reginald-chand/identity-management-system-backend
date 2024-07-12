@@ -9,18 +9,18 @@ export const passwordResetController = async (request, response) => {
     request.body
   );
 
-  const accessToken = request.headers.authorization;
-
   if (error) {
     return response.status(400).json({ responseMessage: error.message });
   }
 
-  const { password, csrfToken, user } = value;
-  const { userName } = request.params;
+  const accessToken = request.headers.authorization;
 
   if (!accessToken) {
     return response.status(403).json({ responseMessage: "UnAuthorized." });
   }
+
+  const { password, csrfToken, user } = value;
+  const { userName } = request.params;
 
   try {
     const userSession = await redisClient.hGetAll(user.email);
