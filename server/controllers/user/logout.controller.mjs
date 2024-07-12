@@ -7,19 +7,19 @@ import { userObjectValidator } from "../../validators/user/user.object.validator
 export const logoutController = async (request, response) => {
   const { error, value } = userObjectValidator.validate(request.body);
 
-  const accessToken = request.headers.authorization;
-  const refreshToken = request.cookies.refreshToken;
-
   if (error) {
     return response.status(400).json({ responseMessage: error.message });
   }
 
-  const { csrfToken, user } = value;
-  const { userName } = request.params;
+  const accessToken = request.headers.authorization;
+  const refreshToken = request.cookies.refreshToken;
 
   if (!accessToken && refreshToken) {
     return response.status(403).json({ responseMessage: "Cannot logout." });
   }
+
+  const { csrfToken, user } = value;
+  const { userName } = request.params;
 
   try {
     const userSession = await redisClient.hGetAll(user.email);
