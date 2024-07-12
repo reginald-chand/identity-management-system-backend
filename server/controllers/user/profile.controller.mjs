@@ -18,20 +18,18 @@ export const profileController = async (request, response) => {
       email: { $eq: user.email },
     });
 
-    if (existingUser) {
-      if (userName !== existingUser.userName) {
-        return response
-          .status(404)
-          .json({ responseMessage: "User not found." });
-      }
-
-      const userProfile = await ProfileModel.findById(existingUser._id);
-      const userData = { ...user, userProfile };
-
-      return response.status(200).json({ responseMessage: userData });
+    if (!existingUser) {
+      return response.status(401).json({ responseMessage: "UnAuthorized." });
     }
 
-    return response.status(401).json({ responseMessage: "UnAuthorized." });
+    if (userName !== existingUser.userName) {
+      return response.status(404).json({ responseMessage: "User not found." });
+    }
+
+    const userProfile = await ProfileModel.findById(existingUser._id);
+    const userData = { ...user, userProfile };
+
+    return response.status(200).json({ responseMessage: userData });
   } catch (error) {
     logger.log({
       level: "error",
